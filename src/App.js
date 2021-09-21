@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Dex from "./Dex"
+import css from "./App.css"
+import { useState } from "react";
 function App() {
+  const baseUrl = 'https://pokeapi.co/api/v2/pokemon/';
+  function getPokemon(poke) {
+    
+    // dude I should study promises and async ASAP
+    fetch(baseUrl + poke)
+    .then(response => response.json())
+    .then(data => {
+      setPokemon({...data});
+    })
+    .catch(err => console.log(err));
+
+  }
+
+  const [input, setInput] = useState('');
+  const [pokemon, setPokemon] = useState(null);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="container">
+      PokéDex
+      <div className="search">
+        <input type="text" value={input} onChange={e => setInput(e.target.value)} placeholder="nome do pokémon"/>
+        <button className="search__button" onClick={() => getPokemon(input)}>Search</button>
+      </div>
+      <Dex poke={pokemon}/>
+    </main>
   );
 }
 
